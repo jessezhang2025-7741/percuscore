@@ -28,6 +28,12 @@ jobs:
           python3 --version
       - name: Project, tooling and core tests
         run: python3 scripts/verify.py --level quick
+      - name: Show tooling diagnostics on failure
+        if: failure()
+        run: |
+          for validation_log in dist/validation/*/scripts.log; do
+            if [ -f "$validation_log" ]; then cat "$validation_log"; fi
+          done
       - name: Unsigned iPad Simulator build
         run: >-
           xcodebuild -project Percuscore.xcodeproj -scheme Percuscore
