@@ -1,0 +1,52 @@
+.build/
+.swiftpm/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+dist/
+__pycache__/
+*.py[cod]
+.superpowers/
+
+# Local diagnostics and generated artifacts (retain them on disk).
+*.log
+*.xcresult/
+*.ipa
+*.dSYM/
+*.bundle
+backups/
+
+# Scores, library data and exported user backups never belong in source history.
+*.pdf
+*.percuscorebackup
+Scores/
+Ink/
+Drafts/
+library.json
+library.backup.json
+backup-export.json
+backup-records.json
+diagnostics/
+.purges/
+*.percuscorebackup.partial
+
+# Signing secrets and private local configuration.
+*.p12
+*.pfx
+*.cer
+*.key
+*.pem
+*.mobileprovision
+*.provisionprofile
+.env
+.env.*
+!.env.example
+Local.xcconfig
+*.xcconfig.local
+*.xcconfig.private
+
+# Source-history backups and local release handoffs are private.
+*.gitbundle
+*.zip
+*.xcarchive/
