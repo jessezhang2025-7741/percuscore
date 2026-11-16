@@ -1,0 +1,35 @@
+name: Source checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: source-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: macos-26
+    timeout-minutes: 30
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          python3 --version
+      - name: Project, tooling and core tests
+        run: python3 scripts/verify.py --level quick
+      - name: Unsigned iPad Simulator build
+        run: >-
+          xcodebuild -project Percuscore.xcodeproj -scheme Percuscore
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath dist/ci-app CODE_SIGNING_ALLOWED=NO build
