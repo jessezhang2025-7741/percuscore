@@ -23,7 +23,7 @@ class VersioningTests(unittest.TestCase):
         self.git("init", "-b", "main")
         self.git("config", "user.name", "Version Test")
         self.git("config", "user.email", "version-test@example.invalid")
-        (self.root / ".gitignore").write_text("*.pdf\n*.log\ndist/\n")
+        (self.root / ".gitignore").write_text("*.pdf\n*.log\ndist/\n__pycache__/\n")
         (self.root / "source.txt").write_text("original source\n")
         self.git("add", ".")
         self.git("commit", "-m", "Initial fixture")
