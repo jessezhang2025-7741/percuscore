@@ -1,0 +1,86 @@
+{
+  "fill-specializations" : [
+    {
+      "value" : {
+        "linear-gradient" : [
+          "srgb:1.00000,0.25490,0.37647,1.00000",
+          "srgb:0.85882,0.06275,0.20392,1.00000"
+        ]
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : {
+        "linear-gradient" : [
+          "srgb:0.36078,0.03529,0.11373,1.00000",
+          "srgb:0.12549,0.01961,0.04314,1.00000"
+        ]
+      }
+    }
+  ],
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill" : "automatic",
+          "glass" : false,
+          "image-name" : "Notation.svg",
+          "name" : "Notation"
+        }
+      ],
+      "lighting" : "individual",
+      "name" : "Music",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0
+      },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0
+      }
+    },
+    {
+      "layers" : [
+        {
+          "fill" : "automatic",
+          "glass" : true,
+          "image-name" : "Score paper.svg",
+          "name" : "Score paper"
+        }
+      ],
+      "lighting" : "individual",
+      "name" : "Score",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.34999999999999998
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.12
+      }
+    },
+    {
+      "layers" : [
+        {
+          "fill" : "automatic",
+          "glass" : true,
+          "image-name" : "Back score.svg",
+          "name" : "Back score"
+        }
+      ],
+      "lighting" : "individual",
+      "name" : "Library depth",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.29999999999999999
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.65000000000000002
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : "shared"
+  }
+}
