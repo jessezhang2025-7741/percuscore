@@ -1,7 +1,13 @@
 # 一键本地验收
 
-在 Finder 双击项目根目录的 **验收.command**，选择快速、完整或发布检查。
-也可以在项目目录运行 `python3 scripts/verify.py`；默认执行快速检查。
+先在终端进入解压后的项目目录。推荐直接运行：
+
+```sh
+python3 scripts/verify.py --level quick
+```
+
+需要交互选择快速、完整或发布检查时，运行 `zsh 验收.command`（不要用 `bash`，该启动器使用 zsh 语法）。若希望从 Finder 双击启动，先运行 `chmod +x 验收.command`，然后双击项目根目录中的文件。ZIP 解压或复制后可能需要重新设置此权限。
+也可以运行 `python3 scripts/verify.py`；默认执行快速检查。
 第一次使用 Mac 可能要求你允许打开本地脚本。工具不安装软件，不访问账号或真机谱库。
 
 ## 三档检查

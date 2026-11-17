@@ -1,10 +1,26 @@
 # Percuscore
 
-[English](README.md) · [构建与安装](docs/BUILDING.md) · [参与贡献](CONTRIBUTING.md)
+[English](README.md) · [中文安装指南](docs/BUILDING.zh-CN.md) · [参与贡献](CONTRIBUTING.md)
 
 离线优先的原生 iPad PDF 乐谱阅读器，使用 SwiftUI、PDFKit 和 PencilKit。
 
 **当前为源码预览版。** 仓库提供 Xcode 工程，不是 App Store 下载，也不是可直接通用安装的 IPA。无需服务器、App 账号或第三方软件包；安装到 iPad 需要 Mac 和 Xcode。
+
+## 下载源码并安装
+
+**[下载最新源码 ZIP](https://github.com/jessezhang2025-7741/percuscore/archive/refs/heads/main.zip)** · **[中文安装指南](docs/BUILDING.zh-CN.md)**
+
+最新源码随 `main` 更新，包含后续维护修正。需要固定旧版本时，可下载 [v0.1.0-preview.1 源码 ZIP](https://github.com/jessezhang2025-7741/percuscore/archive/refs/tags/v0.1.0-preview.1.zip)；它是原始预览快照，不包含后续修正。[发布页](https://github.com/jessezhang2025-7741/percuscore/releases/tag/v0.1.0-preview.1)提供该版本说明。
+
+当前仅提供**免费的源码自签安装方式**，没有 TestFlight、App Store 或可直接安装的 IPA。只有 iPad 无法安装这个 ZIP；没有 Windows、Android 或 iPhone 安装包。只有 Mac 可以用 iPad 模拟器体验，但没有独立 macOS 安装包。真机安装需要 Mac、Xcode、自己的 Apple Account 和 iPad。
+
+## 界面预览
+
+以下为 iPad 模拟器中的实际界面，使用应用自带原创练习谱，不含个人谱库或导入的乐谱。
+
+| Library / 谱库 | Markup / 标注 |
+| --- | --- |
+| ![Local score library](docs/images/library.png) | ![Original score and PencilKit tools](docs/images/markup.png) |
 
 ## 主要功能
 
@@ -24,7 +40,7 @@
 3. 连接 iPad，信任 Mac，按 Xcode 提示开启 Developer Mode。
 4. 首次打开选择 **Try an original practice score** 生成原创练习谱，或选择 **Import PDF**。
 
-免费 Personal Team 的设备配置描述文件有效期为 7 天，到期需重新构建安装。详见 [Apple 说明](https://developer.apple.com/help/account/basics/about-your-developer-account/)和[安装指南](docs/BUILDING.md)。
+免费 Personal Team 的设备配置描述文件有效期为 7 天，到期需用相同 Team 和 Bundle Identifier 重新构建并覆盖安装；不要先卸载。改变签名身份或卸载前，应导出并确认谱库备份可恢复。详见 [Apple 说明](https://developer.apple.com/help/account/basics/about-your-developer-account/)和[中文安装指南](docs/BUILDING.zh-CN.md)。
 
 ## 开发与验证
 

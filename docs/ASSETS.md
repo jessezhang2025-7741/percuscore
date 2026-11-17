@@ -15,7 +15,13 @@ contribution, must be identified and retain its applicable notices.
 - System frameworks, fonts and system-provided symbols are supplied by Apple's
   platform and are not relicensed by the project's MIT license.
 
-Historical UI screenshots, private device reports and imported user scores are
-not part of this source preview. Users retain their own rights and obligations
+Private device screenshots, device reports and imported user scores are not
+part of this source preview. Any public demonstration images must use original
+or synthetic practice material and be checked for personal information before
+publication. Users retain their own rights and obligations
 in imported scores and annotations; installing this app does not grant rights
 to redistribute those works.
+
+`docs/images/library.png` and `markup.png` are actual screenshots of an isolated
+iPad Simulator using only the generated `SampleScore.swift` practice score.
+They contain no personal library or third-party score material.

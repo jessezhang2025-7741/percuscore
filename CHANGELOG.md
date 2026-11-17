@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+- Add direct maintained-source downloads, distinguish the fixed original preview,
+  and explain the free Mac/Xcode/iPad installation path in English and Chinese.
+- Document signing, seven-day Personal Team renewal and backup precautions.
+- Correct the zsh validation-launcher instructions and record actual hosted checks
+  and the interrupted/split Simulator UI results without claiming a full green run.
+
+- Preserve timeout/interruption causes and partial test counts; block later checks
+  when process cleanup cannot be confirmed.
+- Declare the existing local settings and elapsed-time APIs in the privacy
+  manifest; no tracking or data collection is added.
+- Remove actor-isolation warnings from immutable page-preview cache limits.
+- Make the Finder validation launcher executable.
+
+- Show actual library and markup screenshots with original practice material,
+  and place download/install guidance before the image gallery.
+- Check GitHub Actions dependencies monthly through Dependabot.
+
 ## Initial source preview
 
 - Publish the existing native iPad PDF score reader as MIT-licensed source.
