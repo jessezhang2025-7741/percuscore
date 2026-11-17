@@ -6,14 +6,6 @@
 
 **当前为源码预览版。** 仓库提供 Xcode 工程，不是 App Store 下载，也不是可直接通用安装的 IPA。无需服务器、App 账号或第三方软件包；安装到 iPad 需要 Mac 和 Xcode。
 
-## 界面预览
-
-以下为 iPad 模拟器中的实际界面，使用应用自带原创练习谱，不含个人谱库或导入的乐谱。
-
-| Library / 谱库 | Markup / 标注 |
-| --- | --- |
-| ![Local score library](docs/images/library.png) | ![Original score and PencilKit tools](docs/images/markup.png) |
-
 ## 下载源码并安装
 
 **[下载最新源码 ZIP](https://github.com/jessezhang2025-7741/percuscore/archive/refs/heads/main.zip)** · **[中文安装指南](docs/BUILDING.zh-CN.md)**
@@ -21,6 +13,14 @@
 最新源码随 `main` 更新，包含后续维护修正。需要固定旧版本时，可下载 [v0.1.0-preview.1 源码 ZIP](https://github.com/jessezhang2025-7741/percuscore/archive/refs/tags/v0.1.0-preview.1.zip)；它是原始预览快照，不包含后续修正。[发布页](https://github.com/jessezhang2025-7741/percuscore/releases/tag/v0.1.0-preview.1)提供该版本说明。
 
 当前仅提供**免费的源码自签安装方式**，没有 TestFlight、App Store 或可直接安装的 IPA。只有 iPad 无法安装这个 ZIP；没有 Windows、Android 或 iPhone 安装包。只有 Mac 可以用 iPad 模拟器体验，但没有独立 macOS 安装包。真机安装需要 Mac、Xcode、自己的 Apple Account 和 iPad。
+
+## 界面预览
+
+以下为 iPad 模拟器中的实际界面，使用应用自带原创练习谱，不含个人谱库或导入的乐谱。
+
+| Library / 谱库 | Markup / 标注 |
+| --- | --- |
+| ![Local score library](docs/images/library.png) | ![Original score and PencilKit tools](docs/images/markup.png) |
 
 ## 主要功能
 

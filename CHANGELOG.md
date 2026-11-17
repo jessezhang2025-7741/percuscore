@@ -15,6 +15,10 @@
 - Remove actor-isolation warnings from immutable page-preview cache limits.
 - Make the Finder validation launcher executable.
 
+- Show actual library and markup screenshots with original practice material,
+  and place download/install guidance before the image gallery.
+- Check GitHub Actions dependencies monthly through Dependabot.
+
 ## Initial source preview
 
 - Publish the existing native iPad PDF score reader as MIT-licensed source.
