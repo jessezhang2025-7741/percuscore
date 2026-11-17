@@ -48,8 +48,8 @@ private actor PaperPreviewRenderer: PaperPreviewRendering {
 /// Strictly bounded decoded-image ownership, one render in flight, latest wanted queue.
 @MainActor
 final class PageTurnPreviewCache {
-    static let maximumBytes = 16 * 1024 * 1024
-    static let maximumCount = 3
+    nonisolated static let maximumBytes = 16 * 1024 * 1024
+    nonisolated static let maximumCount = 3
     private let byteLimit: Int
     private let countLimit: Int
     private let renderer: any PaperPreviewRendering

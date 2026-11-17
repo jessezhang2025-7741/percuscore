@@ -53,6 +53,41 @@ def parse_tests(log, partial=False):
     return counts
 
 
+def stop_process_group(process):
+    """Best-effort bounded cleanup; never equate parent exit with tree exit."""
+    cleanup = {"confirmed": False, "process_group": process.pid, "errors": []}
+    for sig in (signal.SIGTERM, signal.SIGKILL):
+        try:
+            os.killpg(process.pid, sig)
+        except ProcessLookupError:
+            pass
+        except OSError as error:
+            cleanup["errors"].append("Group %s: %s" % (sig.name, error))
+            # Direct child cleanup can still succeed when group signalling is denied.
+            try:
+                process.kill()
+            except OSError as child_error:
+                cleanup["errors"].append("Parent kill: " + str(child_error))
+        try:
+            process.wait(timeout=5)
+        except (subprocess.TimeoutExpired, OSError) as error:
+            cleanup["errors"].append("Parent wait: " + str(error))
+    deadline = time.monotonic() + 1
+    while True:
+        try:
+            os.killpg(process.pid, 0)
+        except ProcessLookupError:
+            cleanup["confirmed"] = True
+            break
+        except OSError as error:
+            cleanup["errors"].append("Group exit verification: " + str(error))
+            break
+        if time.monotonic() >= deadline:
+            break
+        time.sleep(0.05)
+    return cleanup
+
+
 def run_check(identifier, command, cwd, environment, log, tests=False, timeout=1800):
     start = time.monotonic()
     result = {"id": identifier, "status": "failed", "command": [str(x) for x in command],
@@ -60,6 +95,7 @@ def run_check(identifier, command, cwd, environment, log, tests=False, timeout=1
     log.parent.mkdir(parents=True, exist_ok=True)
     process = None
     interrupted = False
+    partial = False
     try:
         with log.open("w") as output:
             process = subprocess.Popen(command, cwd=cwd, env=environment, stdout=output,
@@ -68,21 +104,12 @@ def run_check(identifier, command, cwd, environment, log, tests=False, timeout=1
                 result["exit_code"] = process.wait(timeout=timeout)
             except (subprocess.TimeoutExpired, KeyboardInterrupt) as error:
                 interrupted = isinstance(error, KeyboardInterrupt)
-                result["reason"] = "Interrupted" if interrupted else "Timeout; process group terminated"
-                try:
-                    os.killpg(process.pid, signal.SIGTERM)
-                except ProcessLookupError:
-                    pass
-                try:
-                    process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    pass
-                # A terminated parent does not prove its descendants stopped.
-                try:
-                    os.killpg(process.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
-                process.wait()
+                partial = True
+                result["reason"] = "Interrupted" if interrupted else "Timeout"
+                result["cleanup"] = stop_process_group(process)
+                result["reason"] += ("; process group exit confirmed" if result["cleanup"]["confirmed"]
+                                     else "; descendant cleanup unconfirmed; further commands blocked")
+
     except FileNotFoundError as error:
         result.update(status="not_run", reason="Missing executable or working directory: " + str(error))
     except OSError as error:
@@ -91,7 +118,7 @@ def run_check(identifier, command, cwd, environment, log, tests=False, timeout=1
         result["status"] = "passed" if result["exit_code"] == 0 else "failed"
         result["reason"] = "Completed" if result["exit_code"] == 0 else "Command exited with " + str(result["exit_code"])
     if tests:
-        result["tests"] = parse_tests(log.read_text(errors="replace"), partial=interrupted or result["reason"].startswith("Timeout"))
+        result["tests"] = parse_tests(log.read_text(errors="replace"), partial=partial)
         counts = result["tests"]
         if result["status"] == "passed" and (counts["executed"] <= counts["skipped"] or counts["failed"]):
             result.update(status="failed", reason="No successful executed tests, or test failures were reported")

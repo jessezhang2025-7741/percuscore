@@ -6,6 +6,22 @@ An offline-first PDF sheet music reader for iPad, built with SwiftUI, PDFKit and
 
 **Source preview:** this repository contains an Xcode project, not an App Store download or a universally installable IPA. No server, application account or third-party package is required. You need a Mac and Xcode to install it on an iPad.
 
+## Screenshots
+
+Actual iPad Simulator screenshots using the original bundled practice score. No personal scores or library are shown.
+
+| Library / 谱库 | Markup / 标注 |
+| --- | --- |
+| ![Local score library](docs/images/library.png) | ![Original score and PencilKit tools](docs/images/markup.png) |
+
+## Download and install from source
+
+**[Download latest source ZIP](https://github.com/jessezhang2025-7741/percuscore/archive/refs/heads/main.zip)** · **[Step-by-step installation](docs/BUILDING.md)**
+
+The latest source follows `main` and includes ongoing maintenance fixes. For a fixed older version, download the [v0.1.0-preview.1 source ZIP](https://github.com/jessezhang2025-7741/percuscore/archive/refs/tags/v0.1.0-preview.1.zip). That original preview does not include later fixes; see its [release page](https://github.com/jessezhang2025-7741/percuscore/releases/tag/v0.1.0-preview.1).
+
+Distribution is **free source installation only**: no TestFlight, App Store or ready-to-install IPA. An iPad alone cannot install this ZIP. There is no Windows, Android or iPhone installer. A Mac alone can run the iPad Simulator; no standalone macOS installer is provided. Installing on an iPad requires a Mac, Xcode and your own Apple Account.
+
 ## Features
 
 - Import PDFs through Files or drag and drop; organize scores with metadata, favorites, bookmarks and setlists.
@@ -26,7 +42,7 @@ An offline-first PDF sheet music reader for iPad, built with SwiftUI, PDFKit and
 3. On the iPad, trust the Mac, enable Developer Mode and follow Xcode's prompts.
 4. Select **Try an original practice score** or **Import PDF**.
 
-Apple's free Personal Team provisioning profiles expire after 7 days; rebuilding and reinstalling is required after expiry. See [Apple's account guide](https://developer.apple.com/help/account/basics/about-your-developer-account/) and the [detailed build guide](docs/BUILDING.md).
+Apple's free Personal Team provisioning profiles expire after 7 days; rebuild and install over the existing app using the same Team and Bundle Identifier after expiry. Do not uninstall first. Export and verify a recoverable library backup before changing app identity or removing the app. See [Apple's account guide](https://developer.apple.com/help/account/basics/about-your-developer-account/) and the [detailed build guide](docs/BUILDING.md).
 
 ## Development
 

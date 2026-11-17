@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 SCRIPTS = Path(__file__).resolve().parent
 
@@ -73,6 +74,30 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(result["status"], "failed")
         self.assertIn("timeout", result["reason"].lower())
         self.assertIn("started", Path(result["log"]).read_text())
+
+    def test_denied_group_cleanup_preserves_timeout_and_partial_counts(self):
+        code = "import time; print(\"Test Case 'a' passed (0.1 seconds).\\nExecuted 1 test, with 0 failures\\nTest Case 'b' passed (0.1 seconds).\", flush=True); time.sleep(2)"
+        with mock.patch.object(self.module.os, "killpg", side_effect=PermissionError("denied")):
+            result = self.module.run_check("denied", [sys.executable, "-c", code], self.root,
+                                           dict(os.environ), self.root / "denied.log", tests=True, timeout=0.2)
+        self.assertTrue(result["reason"].startswith("Timeout"), result)
+        self.assertEqual(result["tests"]["executed"], 2)
+        self.assertTrue(result["tests"]["partial"])
+        self.assertFalse(result["cleanup"]["confirmed"])
+        self.assertIn("descendant", result["reason"].lower())
+
+    def test_cleanup_waits_are_bounded_even_when_kill_cannot_stop_parent(self):
+        process = mock.Mock(pid=12345)
+        def wait(timeout=None):
+            self.assertIsNotNone(timeout, "Cleanup waited indefinitely")
+            raise subprocess.TimeoutExpired("stuck", timeout)
+        process.wait.side_effect = wait
+        process.kill.side_effect = PermissionError("denied")
+        with mock.patch.object(self.module.subprocess, "Popen", return_value=process), \
+                mock.patch.object(self.module.os, "killpg", side_effect=PermissionError("denied")):
+            result = self.module.run_check("stuck", ["stuck"], self.root, {}, self.root / "stuck.log", timeout=0.1)
+        self.assertTrue(result["reason"].startswith("Timeout"), result)
+        self.assertFalse(result["cleanup"]["confirmed"])
 
     def test_timeout_also_stops_a_descendant_ignoring_termination(self):
         pid_file = self.root / "child.pid"
@@ -194,6 +219,24 @@ class ProjectValidationTests(unittest.TestCase):
 
 
 class EntrypointTests(unittest.TestCase):
+    def test_unconfirmed_cleanup_blocks_later_commands_and_simulator_queries(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import verify
+        import argparse
+        with tempfile.TemporaryDirectory() as directory:
+            runner = verify.Validator(argparse.Namespace(developer_dir=None, level="full", plan=False,
+                                                         timeout=1), Path(directory))
+            failed = {"id": "ui", "status": "failed", "reason": "Timeout; descendants unconfirmed",
+                      "exit_code": None, "cleanup": {"confirmed": False}}
+            with mock.patch.object(verify, "run_check", return_value=failed):
+                runner.command("ui", ["unused"])
+            marker = Path(directory) / "must-not-run"
+            result = runner.command("live_relaunch", [sys.executable, "-c", "from pathlib import Path; Path(%r).touch()" % str(marker)])
+            self.assertFalse(marker.exists(), "Later process started after uncertain cleanup")
+            self.assertEqual(result["status"], "not_run")
+            with mock.patch.object(verify, "capture", side_effect=AssertionError("Simulator queried after uncertain cleanup")):
+                runner.simulator()
+
     def test_release_without_inputs_keeps_required_evidence_unexecuted(self):
         sys.path.insert(0, str(SCRIPTS))
         import verify

@@ -128,14 +128,16 @@ class Validator:
         if self.args.plan:
             result = {"id": identifier, "status": "not_run", "reason": "Plan only; no checks executed",
                       "command": list(map(str, command)), "cwd": str(ROOT)}
-        elif prerequisite:
-            result = {"id": identifier, "status": "not_run", "reason": prerequisite,
+        elif self.report.get("blocking_reason") or prerequisite:
+            result = {"id": identifier, "status": "not_run", "reason": self.report.get("blocking_reason") or prerequisite,
                       "command": list(map(str, command)), "cwd": str(ROOT)}
         else:
             print("Running " + identifier + " …", flush=True)
             result = run_check(identifier, list(map(str, command)), ROOT, environment or self.environment,
                                self.output / (identifier + ".log"), tests=tests, timeout=self.args.timeout)
-            if tests and "-resultBundlePath" in command:
+            if result.get("cleanup", {}).get("confirmed") is False:
+                self.report["blocking_reason"] = "Previous process cleanup is unconfirmed; stop and verify descendants before rerunning validation"
+            if tests and not result.get("tests", {}).get("partial") and "-resultBundlePath" in command:
                 bundle = Path(command[command.index("-resultBundlePath") + 1])
                 if bundle.exists():
                     summary = capture(["xcrun", "xcresulttool", "get", "test-results", "summary", "--path", str(bundle), "--compact"], self.environment)
@@ -154,6 +156,9 @@ class Validator:
         return result
 
     def simulator(self):
+        if self.report.get("blocking_reason"):
+            self.skip("simulator_ready", self.report["blocking_reason"])
+            return
         if self.args.plan:
             self.skip("simulator_ready", "Plan only; simulator not queried or booted")
             return
